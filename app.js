@@ -6,7 +6,15 @@ import cookieParser from "cookie-parser";
 import UserModel from "./models/user.js";
 import path from "path";
 import { fileURLToPath } from "url"; // ✅ add this
+import dotenv from "dotenv";
+dotenv.config();
 
+import mongoose from "mongoose";
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error(err));
 import multer from "multer";
 
 import upload from "./config/multerconfig.js";
