@@ -112,7 +112,12 @@ app.post("/register", async (req, res) => {
         age,
       });
 
-      let token = jwt.sign({ email: email, userid: user._id }, "secretkey", {});
+      let token = jwt.sign(
+        { email, userid: user._id },
+        process.env.JWT_SECRET,
+        {}
+      );
+
       res.cookie("token", token, { httpOnly: true });
       // res.send("User registered successfully");
       // await user.save();
@@ -156,7 +161,12 @@ app.post("/login", async (req, res) => {
       return res.redirect("/login");
     }
 
-    let token = jwt.sign({ email: email, userid: user._id }, "secretkey", {});
+    let token = jwt.sign(
+      { email, userid: user._id },
+      process.env.JWT_SECRET,
+      {}
+    );
+
     res.cookie("token", token, { httpOnly: true });
     res.status(200).redirect("/Profile"); // Redirect to home page if getting user data
   });
@@ -180,6 +190,7 @@ function isloggedIn(req, res, next) {
   next();
 }
 
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
