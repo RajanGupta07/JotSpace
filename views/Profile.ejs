@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-teal-100 to-blue-200 flex flex-col">
+  <!-- Profile Box -->
+  <div class="fixed top-5 left-5 z-10">
+    <div class="bg-white max-w-xs w-full rounded-3xl shadow-2xl p-5 text-center">
+      <img src="<%= user.profilepic ? '/images/uploads/' + user.profilepic : '/images/uploads/default.jpg' %>"
+        alt="Avatar" ... class="w-24 h-24 rounded-full mx-auto mb-3 shadow-md object-cover" />
+      <a href="/profile/upload" class="text-blue-500 hover:underline shadow-md  ">Change Profile Picture</a>
+
+      <h1 class="text-2xl font-bold text-gray-800 mb-4 mt-4 tracking-wide">Profile</h1>
+      <div class="text-left space-y-3 text-gray-700">
+        <p><span class="font-semibold text-blue-500">Username:</span>
+          <%= user.username %>
+        </p>
+        <p><span class="font-semibold text-blue-500">Name:</span>
+          <%= user.name %>
+        </p>
+        <p><span class="font-semibold text-blue-500">Email:</span>
+          <%= user.email %>
+        </p>
+        <p><span class="font-semibold text-blue-500">Age:</span>
+          <%= user.age %>
+        </p>
+      </div>
+      <a href="/logout"
+        class="mt-6 inline-block bg-red-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-600 transition shadow-md">
+        Logout
+      </a>
+    </div>
+  </div>
+
+  <main class="flex-grow pt-16 pb-12 px-6 ml-0 md:ml-[200px]">
+    <!-- Greeting -->
+
+    <div class="max-w-4xl mx-auto mb-6 px-4">
+      <h2 class="text-2xl font-semibold text-gray-800">
+        Hello, <%= user.username %> 👋
+      </h2>
+      <p class="text-gray-600">You can create a new post below.</p>
+    </div>
+    <!-- Create Post Form -->
+    <section
+      class="w-full max-w-4xl mx-auto bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-3xl shadow-2xl p-10 mb-12">
+      <h2 class="text-3xl font-extrabold text-blue-600 text-center mb-8 tracking-tight">Create a Post</h2>
+
+      <form method="POST" action="/post" class="space-y-6">
+        <textarea name="content" rows="6"
+          class="w-full p-5 border border-blue-200 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-700 placeholder-gray-400 transition-all duration-200 resize-none"
+          placeholder="What's on your mind?" required></textarea>
+
+        <button type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300">
+          Share Post
+        </button>
+      </form>
+    </section>
+
+
+    <!-- Posts Section -->
+    <section class="w-full max-w-6xl mx-auto bg-gradient-to-br from-blue-100 to-blue-50 rounded-3xl shadow-2xl p-10">
+      <h3 class="text-3xl font-extrabold text-center text-gray-800 mb-10 tracking-tight text-blue-600">Your Posts</h3>
+
+      <div
+        class="flex gap-6 overflow-x-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-transparent pb-2 px-1">
+        <% user.posts.forEach(post=> { %>
+          <div
+            class="min-w-[320px] bg-white border border-gray-100 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-6 flex flex-col justify-between flex-shrink-0">
+            <div>
+              <h4 class="font-semibold text-blue-600 mb-2 text-lg tracking-wide">
+                <%= user.username %>
+              </h4>
+              <p class="text-gray-700 mb-4 whitespace-pre-wrap break-words text-sm leading-relaxed">
+                <%= post.content %>
+              </p>
+            </div>
+            <div class="mt-auto">
+              <div class="text-xs text-gray-400 mb-2">Posted on <%= new Date(post.date).toLocaleDateString() %>
+              </div>
+              <div class="text-sm text-blue-500 font-medium mb-4">
+                <%= post.likes.length %> likes
+              </div>
+              <div class="flex justify-between text-sm font-medium">
+                <a href="/like/<%= post._id %>" class="text-blue-500 hover:text-blue-700 hover:underline transition">
+                  <%= post.likes.indexOf(user._id)===-1 ? "Like" : "Unlike" %>
+                </a>
+                <a href="/Edit/<%= post._id %>" class="text-gray-500 hover:text-gray-700 hover:underline transition">
+                  Edit
+                </a>
+              </div>
+            </div>
+          </div>
+          <% }); %>
+      </div>
+    </section>
+
+  </main>
+</body>
+
+</html>
